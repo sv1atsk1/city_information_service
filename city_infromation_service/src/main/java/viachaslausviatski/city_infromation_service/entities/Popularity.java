@@ -14,11 +14,11 @@ public class Popularity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "object_id", nullable = false)
-    private Object object;
+    private MyObject object;
 
     @Column(name = "popularity_date", nullable = false)
     private java.util.Date popularityDate;

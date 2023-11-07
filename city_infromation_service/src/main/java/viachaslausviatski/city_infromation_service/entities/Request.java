@@ -16,11 +16,11 @@ public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "object_id", nullable = false)
-    private Object object;
+    private MyObject object;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)

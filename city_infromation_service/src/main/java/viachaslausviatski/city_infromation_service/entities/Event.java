@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,11 +18,11 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "object_id", nullable = false)
-    private Object object;
+    private MyObject object;
 
     @Column(name = "event_name", nullable = false)
     private String eventName;
@@ -33,4 +35,26 @@ public class Event {
 
     @OneToMany(mappedBy = "event")
     private List<EventRequest> eventRequests;
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,
+            mappedBy="event")
+    private List<Image> images = new ArrayList<>();
+
+    private Long previewImageId;
+
+    private LocalDateTime dateOfCreated;
+
+    @ManyToOne(cascade = CascadeType.REFRESH,fetch = FetchType.LAZY)
+    @JoinColumn
+    private User user;
+
+    @PrePersist
+    private void init() {
+        dateOfCreated = LocalDateTime.now();
+    }
+
+    public void addImageToEvent(Image image) {
+        image.setEvent(this);
+        images.add(image);
+    }
 }
