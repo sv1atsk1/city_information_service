@@ -33,10 +33,10 @@ public class MyObject {
     private String type;
 
     @Column(name = "opening_date")
-    private Date openingDate;
+    private String openingDate; // Было Date
 
     @Column(name = "work_status")
-    private Date workStatus;
+    private String workStatus; // Было Date
 
     @Column(name = "popularity")
     private Integer popularity;

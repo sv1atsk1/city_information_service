@@ -1,20 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Ивенты Беларуси</title>
-</head>
-<body>
-<h1>Ивенты Беларуси</h1><hr>
-<h3>Подробная информация о владельце ${user.name}</h3>
-<b>Номер телефона: </b> ${user.phoneNumber}<br>
-<h4>Ивенты пользователя : ${user.name}</h4>
-<#list events as event>
-    <p><b>${event.description}</b><br> <b>${event.name} </b>| <a href = "/event/${event.id}">Подробнее...</a></p>
-    <#else>
-    <h3> Товаров нет</h3>
-</#list>
-<#if errorMessage??>
-    <h2 style="color:red">${errorMessage}</h2>
-</#if>
-</body>
-</html>
+<#import "blocks/template.ftlh" as t>
+<@t.template userByPrincipal>
+    <h1 style="text-align: center">Информация о пользователе</h1>
+    <hr>
+    <div style="text-align: center">
+<#--        <img src="/static/images/avatar.png"-->
+<#--             style="border:2px solid black; border-radius: 20px" height="120">-->
+        <br>
+        <br>
+        <h2>${user.name}</h2>
+        <br>
+        Номер телефона: <b>${user.phoneNumber}</b>
+    </div>
+    <br>
+    <hr>
+    <h1 style="text-align: center">Ивенты пользователя ${user.name}</h1>
+    <br>
+    <div class="card-columns">
+        <#list objects as object>
+            <a href="/object/${object.id}" class="object-link">
+                <div class="card text-white bg-dark my-3 event">
+
+                    <img src="/images/${object.previewImageId}"
+                         class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">${object.name}</h5>
+                        <p class="card-text">${object.type} </p>
+                    </div>
+                    <div class="card-footer">
+                        ${object.owner.name}
+                    </div>
+                </div>
+            </a>
+        <#else>
+            <h1 style="text-align: center">Не найдено</h1>
+        </#list>
+    </div>
+</@t.template>
