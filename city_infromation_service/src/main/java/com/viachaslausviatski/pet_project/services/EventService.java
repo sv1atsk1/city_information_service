@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +112,26 @@ public class EventService {
             return optionalEvent.get();
         } else {
             throw new ObjectNotFoundException("Event not found with ID: " + eventId);
+        }
+    }
+
+    public void updateEvent(Principal principal, Event updatedEvent,
+                            MultipartFile file1, MultipartFile file2, MultipartFile file3) throws IOException {
+        User user = getUserByPrincipal(principal);
+
+        Event existingEvent = getEventById(updatedEvent.getId());
+        if (existingEvent.getOwner().getId().equals(user.getId())) {
+            existingEvent.setName(updatedEvent.getName());
+            existingEvent.setType(updatedEvent.getType());
+            existingEvent.setDescription(updatedEvent.getDescription());
+            existingEvent.setStartDate(updatedEvent.getStartDate());
+            existingEvent.setNumberOfVisitors(updatedEvent.getNumberOfVisitors());
+
+            // Add logic to update other fields if needed
+
+            saveEvent(principal, existingEvent, file1, file2, file3);
+        } else {
+            throw new AccessDeniedException("You do not have permission to update this event.");
         }
     }
 }

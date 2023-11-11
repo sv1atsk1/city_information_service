@@ -53,22 +53,16 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="custom-file">
-                    <input required type="file" name="file1" id="file1">
-                    <label class="custom-file-label" for="file1">Первая фотография к товару</label>
-                </div>
+                <label for="file1">Фотография 1</label>
+                <input type="file" class="form-control" id="file1" name="file1">
             </div>
             <div class="form-group">
-                <div class="custom-file">
-                    <input type="file" name="file2" id="file2">
-                    <label class="custom-file-label" for="file2">Вторая фотография к товару</label>
-                </div>
+                <label for="file2">Фотография 2</label>
+                <input type="file" class="form-control" id="file2" name="file2">
             </div>
             <div class="form-group">
-                <div class="custom-file">
-                    <input type="file" name="file3" id="file3">
-                    <label class="custom-file-label" for="file3">Третья фотография к товару</label>
-                </div>
+                <label for="file3">Фотография 3</label>
+                <input type="file" class="form-control" id="file3" name="file3">
             </div>
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 
@@ -96,6 +90,9 @@
                     <div class="card-body">
                         <h5 class="card-title">${object.name}</h5>
                         <p class="card-text">${object.type} </p>
+                        <p class="card-text">${object.openingDate} </p>
+                        <p class="card-text">${object.popularity} </p>
+                        <p class="card-text">${object.workStatus} </p>
                     </div>
                 </div>
             </a>

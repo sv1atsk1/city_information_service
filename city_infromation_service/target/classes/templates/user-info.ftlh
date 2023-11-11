@@ -13,7 +13,7 @@
     </div>
     <br>
     <hr>
-    <h1 style="text-align: center">Ивенты пользователя ${user.name}</h1>
+    <h1 style="text-align: center">Объекты пользователя ${user.name}</h1>
     <br>
     <div class="card-columns">
         <#list objects as object>

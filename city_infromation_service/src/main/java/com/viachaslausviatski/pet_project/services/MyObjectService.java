@@ -99,13 +99,13 @@ public class MyObjectService {
 
     public void updateObject(Principal principal, MyObject updatedObject,
                              MultipartFile file1, MultipartFile file2, MultipartFile file3) throws IOException {
-        // Получите текущего пользователя
+
         User user = getUserByPrincipal(principal);
 
-        // Проверьте, принадлежит ли объект текущему пользователю
+
         MyObject existingObject = getObjectById(updatedObject.getId());
         if (existingObject.getOwner().getId().equals(user.getId())) {
-            // Обновите поля объекта
+
             existingObject.setName(updatedObject.getName());
             existingObject.setAddress(updatedObject.getAddress());
             existingObject.setOpeningDate(updatedObject.getOpeningDate());
@@ -114,39 +114,14 @@ public class MyObjectService {
             existingObject.setType(updatedObject.getType());
             existingObject.setNumberOfSeats(updatedObject.getNumberOfSeats());
 
-            // Обновите изображения (при необходимости)
 
-            // Сохраните объект
+
+
             saveObject(principal, existingObject, file1, file2, file3);
         } else {
-            // Обработка ошибки, если объект не принадлежит пользователю
+
             throw new AccessDeniedException("You do not have permission to update this object.");
         }
-    }
-
-    public void submitEventRequest(Long objectId,
-                                   String eventName,
-                                   String eventType,
-                                   String description,
-                                   String startDate,
-                                   int numberOfVisitors,
-                                   Principal principal) {
-        MyObject object = getObjectById(objectId);
-        User user = userRepository.findByEmail(principal.getName());
-
-        // Создайте новый запрос на ивент
-        Request request = new Request();
-        request.setObjectName(object.getName());
-        request.setStartDate(startDate);
-        request.setEventName(eventName);
-        request.setEventType(eventType);
-        request.setUserFullName(user.getName());
-
-        // Свяжите запрос с объектом
-        request.getObjects().add(object);
-
-        // Сохраните запрос на ивент
-        requestRepository.save(request);
     }
 
     public void saveRequest(Request request) {
