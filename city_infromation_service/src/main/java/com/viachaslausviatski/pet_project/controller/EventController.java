@@ -56,7 +56,7 @@ public class EventController {
                                      @RequestParam MultipartFile file3,
                                      Principal principal) {
         try {
-            // Create an Event object
+            
             Event event = new Event();
             event.setName(eventName);
             event.setType(eventType);
@@ -64,17 +64,17 @@ public class EventController {
             event.setStartDate(eventStartDate);
             event.setNumberOfVisitors(eventNumberOfVisitors);
 
-            // Get the authenticated user
+
             User user = userService.getUserByPrincipal(principal);
 
-            // Get the object by ID
+
             MyObject object = myObjectService.getObjectById(objectId);
 
             event.setObject(object);
-            // Save the event and get the saved event with images
+
             Event savedEvent = eventService.saveEvent(principal, event, file1, file2, file3);
 
-            // Create a Request object
+
             Request request = new Request();
             request.setObjectName(requestObjectName);
             request.setStartDate(requestStartDate);
@@ -82,20 +82,20 @@ public class EventController {
             request.setEventType(requestEventType);
             request.setUserFullName(requestUserFullName);
 
-            // Associate the request with the event using the savedEvent
+
             request.setEvent(savedEvent);
 
-            // Associate the request with the object
+
             request.getObjects().add(object);
 
-            // Save the request
+
             myObjectService.saveRequest(request);
 
             return "redirect:/";
         } catch (IOException e) {
-            // Handle file-related exceptions here
-            e.printStackTrace(); // Add proper error handling
-            return "error-page"; // Redirect to an error page
+
+            e.printStackTrace(); 
+            return "error-page"; 
         }
     }
 }
