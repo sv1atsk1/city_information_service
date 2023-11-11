@@ -43,17 +43,17 @@ public class MyObjectController {
     }
 
     @GetMapping("/object/{id}")
-    public String eventInfo(@PathVariable Long id, Model model, Principal principal) {
+    public String objectInfo(@PathVariable Long id, Model model, Principal principal) {
         MyObject myObject = myObjectService.getObjectById(id);
         model.addAttribute("user", myObjectService.getUserByPrincipal(principal));
         model.addAttribute("object", myObject);
         model.addAttribute("images", myObject.getImages());
-        model.addAttribute("eventOwner", myObject.getOwner());
+        model.addAttribute("objectOwner", myObject.getOwner());
         return "event-info";
     }
 
     @PostMapping("/object/delete/{id}")
-    public String deleteEvent(@PathVariable Long id, Principal principal) {
+    public String deleteObject(@PathVariable Long id, Principal principal) {
         myObjectService.deleteObject(myObjectService.getUserByPrincipal(principal), id);
         return "redirect:/my/objects";
     }
@@ -64,12 +64,33 @@ public class MyObjectController {
     }
 
     @GetMapping("/my/objects")
-    public String userEvents(Principal principal, Model model) {
+    public String userObjects(Principal principal, Model model) {
         User user = myObjectService.getUserByPrincipal(principal);
         model.addAttribute("user", user);
         model.addAttribute("objects", user.getObjects());
         return "my-objects";
     }
+
+    @GetMapping("/object/edit/{id}")
+    public String editObject(@PathVariable Long id, Model model, Principal principal) {
+        MyObject myObject = myObjectService.getObjectById(id);
+        model.addAttribute("user", myObjectService.getUserByPrincipal(principal));
+        model.addAttribute("object", myObject);
+        return "edit-object";
+    }
+
+    @PostMapping("/object/update/{id}")
+    public String updateObject(@PathVariable Long id, @RequestParam("file1") MultipartFile file1,
+                               @RequestParam("file2") MultipartFile file2, @RequestParam("number_of_seats") int numberOfSeats,
+                               @RequestParam("file3") MultipartFile file3, MyObject updatedObject, Principal principal)
+            throws IOException {
+        updatedObject.setId(id);
+        updatedObject.setNumberOfSeats(numberOfSeats);
+        myObjectService.updateObject(principal, updatedObject, file1, file2, file3);
+        return "redirect:/object/" + id;
+    }
+
+
 
 
 }

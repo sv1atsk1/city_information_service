@@ -21,7 +21,7 @@ public class UserController {
     public String userInfo(@PathVariable("user") User user, Model model, Principal principal) {
         model.addAttribute("user", user);
         model.addAttribute("userByPrincipal", userService.getUserByPrincipal(principal));
-        model.addAttribute("objects", user.getEvents());
+        model.addAttribute("objects", user.getObjects());
         return "user-info";
     }
 
@@ -57,5 +57,18 @@ public class UserController {
             return "registration";
         }
         return "redirect:/login";
+    }
+
+    @GetMapping("/profile/edit")
+    public String editProfile(Model model, Principal principal) {
+        User user = userService.getUserByPrincipal(principal);
+        model.addAttribute("user", user);
+        return "edit-profile";
+    }
+
+    @PostMapping("/profile/update")
+    public String updateProfile(User updatedUser, Model model, Principal principal) {
+        userService.updateUserProfile(principal, updatedUser);
+        return "redirect:/profile";
     }
 }

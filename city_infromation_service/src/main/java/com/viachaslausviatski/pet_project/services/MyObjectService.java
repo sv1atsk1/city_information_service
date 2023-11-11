@@ -1,21 +1,22 @@
 package com.viachaslausviatski.pet_project.services;
 
-import com.viachaslausviatski.pet_project.entity.Event;
-import com.viachaslausviatski.pet_project.entity.Images;
-import com.viachaslausviatski.pet_project.entity.MyObject;
-import com.viachaslausviatski.pet_project.entity.User;
+import com.viachaslausviatski.pet_project.entity.*;
 import com.viachaslausviatski.pet_project.repositories.EventRepository;
 import com.viachaslausviatski.pet_project.repositories.MyObjectRepository;
+import com.viachaslausviatski.pet_project.repositories.RequestRepository;
 import com.viachaslausviatski.pet_project.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -25,6 +26,10 @@ public class MyObjectService {
     private final MyObjectRepository myObjectRepository;
 
     private final UserRepository userRepository;
+
+    private final RequestRepository requestRepository;
+
+    private final EventService eventService;
     private List<MyObject> objects = new ArrayList<>();
 
 
@@ -84,10 +89,67 @@ public class MyObjectService {
             }
         } else {
             log.error("Event with id = {} is not found", id);
-        }    }
+        }
+    }
 
     public MyObject getObjectById(Long id){
 
         return myObjectRepository.findById(id).orElse(null);
+    }
+
+    public void updateObject(Principal principal, MyObject updatedObject,
+                             MultipartFile file1, MultipartFile file2, MultipartFile file3) throws IOException {
+        // Получите текущего пользователя
+        User user = getUserByPrincipal(principal);
+
+        // Проверьте, принадлежит ли объект текущему пользователю
+        MyObject existingObject = getObjectById(updatedObject.getId());
+        if (existingObject.getOwner().getId().equals(user.getId())) {
+            // Обновите поля объекта
+            existingObject.setName(updatedObject.getName());
+            existingObject.setAddress(updatedObject.getAddress());
+            existingObject.setOpeningDate(updatedObject.getOpeningDate());
+            existingObject.setWorkStatus(updatedObject.getWorkStatus());
+            existingObject.setPopularity(updatedObject.getPopularity());
+            existingObject.setType(updatedObject.getType());
+            existingObject.setNumberOfSeats(updatedObject.getNumberOfSeats());
+
+            // Обновите изображения (при необходимости)
+
+            // Сохраните объект
+            saveObject(principal, existingObject, file1, file2, file3);
+        } else {
+            // Обработка ошибки, если объект не принадлежит пользователю
+            throw new AccessDeniedException("You do not have permission to update this object.");
+        }
+    }
+
+    public void submitEventRequest(Long objectId,
+                                   String eventName,
+                                   String eventType,
+                                   String description,
+                                   String startDate,
+                                   int numberOfVisitors,
+                                   Principal principal) {
+        MyObject object = getObjectById(objectId);
+        User user = userRepository.findByEmail(principal.getName());
+
+        // Создайте новый запрос на ивент
+        Request request = new Request();
+        request.setObjectName(object.getName());
+        request.setStartDate(startDate);
+        request.setEventName(eventName);
+        request.setEventType(eventType);
+        request.setUserFullName(user.getName());
+
+        // Свяжите запрос с объектом
+        request.getObjects().add(object);
+
+        // Сохраните запрос на ивент
+        requestRepository.save(request);
+    }
+
+    public void saveRequest(Request request) {
+        requestRepository.save(request);
     }
 }

@@ -27,7 +27,7 @@ public class UserService {
         if (userRepository.findByEmail(email) != null) return false;
         user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getRoles().add(Role.ROLE_USER);
+        user.getRoles().add(Role.ROLE_ADMIN);
         log.info("Saving new User with email: {}", email);
         userRepository.save(user);
         return true;
@@ -65,6 +65,19 @@ public class UserService {
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь с ID " + userId + " не найден"));
+    }
+
+    public void updateUserProfile(Principal principal, User updatedUser) {
+        // Получите текущего пользователя
+        User user = getUserByPrincipal(principal);
+
+        // Обновите поля пользователя
+        user.setName(updatedUser.getName());
+        user.setEmail(updatedUser.getEmail());
+        user.setPhoneNumber(updatedUser.getPhoneNumber());
+
+        // Сохраните обновленного пользователя
+        userRepository.save(user);
     }
 
 }

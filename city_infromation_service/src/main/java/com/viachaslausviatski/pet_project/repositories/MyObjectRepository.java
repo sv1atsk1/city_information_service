@@ -8,4 +8,7 @@ import java.util.List;
 public interface MyObjectRepository extends JpaRepository<MyObject,Long> {
 
     List<MyObject> findByName(String name);
+
+//    MyObject findById(long id);
+    //MyObject findMyObjectById(Long id);
 }
