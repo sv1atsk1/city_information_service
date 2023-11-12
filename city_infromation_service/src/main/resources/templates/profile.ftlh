@@ -21,10 +21,10 @@
            href="/my/objects">
             Мои объекты
         </a>
-        <a class="btn btn-dark mb-3" style="text-align: center; width: 100%"
-           href="/my/events">
-            Мои ивенты
-        </a>
+<#--        <a class="btn btn-dark mb-3" style="text-align: center; width: 100%"-->
+<#--           href="/my/events">-->
+<#--            Мои ивенты-->
+<#--        </a>-->
         <a class="btn btn-dark mb-3" style="text-align: center; width: 100%"
            href="/profile/edit">
             Редактировать профиль
