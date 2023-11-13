@@ -26,10 +26,6 @@
             <a href="/event/${event.id}" class="event-link">
                 <div class="card text-white bg-dark my-3 event">
                     <div class="card-top">
-                        <a class="btn btn-dark mb-3" style="text-align: center; width: 100%"
-                           href="/my/events/request?eventId=${event.id}">
-                            Запрос на ивент
-                        </a>
                     </div>
                     <img src="/images/${event.previewImageId}" class="card-img-top">
                     <div class="card-body">

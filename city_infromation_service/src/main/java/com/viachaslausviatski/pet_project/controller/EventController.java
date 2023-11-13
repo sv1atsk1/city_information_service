@@ -156,4 +156,14 @@ public class EventController {
             return "error-page";
         }
     }
+    @GetMapping("/event/{eventId}")
+    public String viewEventDetails(@PathVariable Long eventId, Model model, Principal principal) {
+        Event event = eventService.getEventById(eventId);
+        User user = userService.getUserByPrincipal(principal);
+        model.addAttribute("event", event);
+        model.addAttribute("user", user);
+        model.addAttribute("images", event.getImages());
+        model.addAttribute("objectOwner", event.getOwner());
+        return "event-details";
+    }
 }

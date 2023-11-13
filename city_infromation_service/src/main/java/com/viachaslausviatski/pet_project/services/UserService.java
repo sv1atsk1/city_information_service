@@ -68,15 +68,15 @@ public class UserService {
     }
 
     public void updateUserProfile(Principal principal, User updatedUser) {
-        // Получите текущего пользователя
+
         User user = getUserByPrincipal(principal);
 
-        // Обновите поля пользователя
+
         user.setName(updatedUser.getName());
         user.setEmail(updatedUser.getEmail());
         user.setPhoneNumber(updatedUser.getPhoneNumber());
 
-        // Сохраните обновленного пользователя
+
         userRepository.save(user);
     }
 
